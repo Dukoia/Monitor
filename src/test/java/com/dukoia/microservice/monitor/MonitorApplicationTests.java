@@ -1,6 +1,7 @@
 package com.dukoia.microservice.monitor;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dukoia.microservice.monitor.bean.MailBean;
 import com.dukoia.microservice.monitor.bean.Student;
 import com.dukoia.microservice.monitor.response.Result;
@@ -11,12 +12,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.List;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -39,18 +43,20 @@ public class MonitorApplicationTests {
     @Test
     public void contextLoads() {
 
-        Boolean hasKey = redisTemplate.hasKey("REDIS_KEY");
-        if (!hasKey){
-
-            redisTemplate.opsForValue().set(REDIS_KEY,"200");
-        }
-        String value = redisTemplate.opsForValue().get(REDIS_KEY);
-        System.out.println(value);
-        if (!"300".equals(value)){
-            System.out.println("获取的值不一样");
-        }
-        redisTemplate.delete(REDIS_KEY);
-        System.out.println(redisTemplate.hasKey("REDIS_KEY"));
+        String forObject = restTemplate.getForObject("https://blog.csdn.net/adminBfl/article/details/84819735", String.class);
+        System.out.println(forObject);
+//        Boolean hasKey = redisTemplate.hasKey("REDIS_KEY");
+//        if (!hasKey){
+//
+//            redisTemplate.opsForValue().set(REDIS_KEY,"200");
+//        }
+//        String value = redisTemplate.opsForValue().get(REDIS_KEY);
+//        System.out.println(value);
+//        if (!"300".equals(value)){
+//            System.out.println("获取的值不一样");
+//        }
+//        redisTemplate.delete(REDIS_KEY);
+//        System.out.println(redisTemplate.hasKey("REDIS_KEY"));
 //        Result<Student> result = restTemplate.getForObject("http://106.13.196.27:8880/hello/1", Result.class);
 //        System.out.println(JSON.toJSONString(result));
 //        MailBean mailBean = new MailBean();
@@ -78,5 +84,10 @@ public class MonitorApplicationTests {
 ////            log.error("邮件发送失败", e);
 //        }
 //    }
-
+//    @PostConstruct
+//    public void init(){
+//        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+//        requestFactory.setReadTimeout(120*1000);
+//        this.restTemplate = new RestTemplate(requestFactory);
+//    }
 }
