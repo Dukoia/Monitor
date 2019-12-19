@@ -65,7 +65,7 @@ public class MonitorSchedule {
     @Scheduled(cron = "0/5 * * * * ?")
     public void exe() {
 
-        Result<Student> result = restTemplate.getForObject("http://106.13.196.27:8880/hello/1", Result.class);
+        Result<Student> result = restTemplate.getForObject("http://106.13.19.27:8880/hello/1", Result.class);
         log.info("===========>:{}" , JSON.toJSONString(result));
 
         Boolean flag = redisTemplate.hasKey(REDIS_KEY);
