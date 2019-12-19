@@ -16,7 +16,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
@@ -65,7 +63,7 @@ public class MonitorSchedule {
     @Scheduled(cron = "0/5 * * * * ?")
     public void exe() {
 
-        Result<Student> result = restTemplate.getForObject("http://106.13.1.27:8880/hello/1", Result.class);
+        Result<Student> result = restTemplate.getForObject("http://106.13.6.27:8880/hello/1", Result.class);
         log.info("===========>:{}" , JSON.toJSONString(result));
 
         Boolean flag = redisTemplate.hasKey(REDIS_KEY);
@@ -200,16 +198,6 @@ public class MonitorSchedule {
         } catch (Exception e) {
             log.error("邮件发送失败", e.getMessage());
         }
-    }
 
-    /**
-     * restTemplate访问https
-     * 待验证
-     */
-    @PostConstruct
-    public void init(){
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setReadTimeout(120*1000);
-        this.restTemplate = new RestTemplate(requestFactory);
     }
 }
